@@ -1,0 +1,3 @@
+php artisan migrate:fresh
+php artisan db:seed --class=RolSeeder
+php artisan db:seed --class=AppointmentStatusSeeder
