@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('notifications', function (Blueprint $table) {
-            $table->string('identity_card_user')->nullable()->after('id');
+            $table->unsignedBigInteger('id_user')->nullable()->after('id');
 
-            $table->foreign('identity_card_user')
-                ->references('identity_card_user')
+            $table->foreign('id_user')
+                ->references('id')
                 ->on('users')
                 ->onDelete('set null')
                 ->onUpdate('cascade');

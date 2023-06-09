@@ -1,3 +1,6 @@
 php artisan migrate:fresh
 php artisan db:seed --class=RolSeeder
 php artisan db:seed --class=AppointmentStatusSeeder
+php artisan db:seed --class=DatabaseSeeder
+
+php artisan make:controller API\LoginController
