@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Reset_code_password;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendCodeResetPassword;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -27,6 +29,8 @@ class AuthController extends Controller
 
             if ($user) {
                 if (Hash::check($request['password'], $user->password)) {
+                    $token = PersonalAccessToken::where('tokenable_id', $user->id);
+                    $token->delete();
                     $token = $user->createToken('auth_token')->plainTextToken;
                     return response()->json(['token' => $token], 200);
                 } else {
@@ -85,7 +89,6 @@ class AuthController extends Controller
         } else {
             return response()->json(['message' => 'Código no válido'], 404);
         }
-
     }
 
     public function resetPassword(Request $request)
@@ -124,6 +127,33 @@ class AuthController extends Controller
             }
         } else {
             return response()->json(['message' => 'Código no válido'], 404);
+        }
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string|min:8',
+        ]);
+
+        // variable boolean para verificar que la contraseña coincide con la confirmacion
+        $password_confirm = $request->input('password') == $request->input('password_confirm');
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        } else {
+            if (!$password_confirm) {
+                return response()->json(['error' => 'Contraseña no coincide con la confirmación'], 422);
+            }
+
+            // Actualizar el campo password
+            $user->password = Hash::make($request->input('password'));
+
+            $user->save();
+
+            return response()->json(['message' => 'Contraseña actualizada'], 200);
         }
     }
 }
