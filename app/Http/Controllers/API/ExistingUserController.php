@@ -47,6 +47,20 @@ class ExistingUserController extends Controller
         }
     }
 
+    // mostrar un usuario especifico por medio del id del rol 
+    public function getUsersByRol(int $id)
+    {
+        $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
+        $rol_id = $user->rol_id; // Acceder a la propiedad rol_id del modelo de usuario
+
+        if ($rol_id == 1) {
+            $users = User::where('rol_id', $id)->get();
+            return response()->json($users);
+        }else {
+                return response()->json(['error' => 'Usuario sin privilegios'], 422);
+            }
+    }
+
     // editar datos propios - usuario logeado
     public function updateLoggedInUser(Request $request)
     {
@@ -109,6 +123,7 @@ class ExistingUserController extends Controller
             $user = User::find($id);
             if (isset($user)){
                 $user->delete();
+                return response()->json(['message' => 'Datos Usuario Eliminado'], 200);
             } else {
                 return response()->json(['error' => 'Usuario no encontrado'], 404);
             }

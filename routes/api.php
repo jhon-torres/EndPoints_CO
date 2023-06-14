@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/register/admin', [RegisterUsersController::class, 'registerAdmin']);
     Route::get('/get-all-users', [ExistingUserController::class, 'getAllUsers']);
     Route::get('/get-user/{id}', [ExistingUserController::class, 'getUserById']);
+    Route::get('/get-users/{id}', [ExistingUserController::class, 'getUsersByRol']);
     // AYUDA A QUE CADA USUARIO ACTUALICE SU INFORMACIÓN
     Route::post('/update-user', [ExistingUserController::class, 'updateLoggedInUser']);
     Route::post('/update-user/{id}', [ExistingUserController::class, 'updateUserById']);
