@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ExistingUserController extends Controller
 {
@@ -72,10 +73,28 @@ class ExistingUserController extends Controller
             'email' => 'required|string|email|max:255',
             'phone' => 'required|string|numeric|digits:10',
             'address' => 'required|string|max:255',
+            'image' => 'required|image',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // return response()->json($user);
+        $url = $user->profile_picture_url;
+        $public_id = $user->profile_picture_id;
+
+        if (isset($user->profile_picture_id) && isset($user->profile_picture_url)) {
+            Cloudinary::destroy($public_id);
+            $file = $request->file('image');
+            $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
+            $public_id = $obj->getPublicId();
+            $url = $obj->getSecurePath();
+        } else {
+            $file = $request->file('image');
+            $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
+            $public_id = $obj->getPublicId();
+            $url = $obj->getSecurePath();
         }
 
         $user->names = $request->input('names');
@@ -83,6 +102,8 @@ class ExistingUserController extends Controller
         $user->email = $request->input('email');
         $user->phone = $request->input('phone');
         $user->address = $request->input('address');
+        $user->profile_picture_id = $public_id;
+        $user->profile_picture_url = $url;
 
         // if ($user->id == 2 ){
         //     $user->profesional_description = $request->input('profesional_description');
@@ -113,10 +134,27 @@ class ExistingUserController extends Controller
                 'email' => 'required|string|email|max:255',
                 'phone' => 'required|string|numeric|digits:10',
                 'address' => 'required|string|max:255',
+                'image' => 'required|image',
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $url = $user->profile_picture_url;
+            $public_id = $user->profile_picture_id;
+
+            if (isset($user->profile_picture_id) && isset($user->profile_picture_url)) {
+                Cloudinary::destroy($public_id);
+                $file = $request->file('image');
+                $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
+                $public_id = $obj->getPublicId();
+                $url = $obj->getSecurePath();
+            } else {
+                $file = $request->file('image');
+                $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
+                $public_id = $obj->getPublicId();
+                $url = $obj->getSecurePath();
             }
 
             $user->names = $request->input('names');
@@ -124,6 +162,8 @@ class ExistingUserController extends Controller
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
             $user->address = $request->input('address');
+            $user->profile_picture_id = $public_id;
+            $user->profile_picture_url = $url;
 
             // if ($user->id == 2 ){
             //     $user->profesional_description = $request->input('profesional_description');
