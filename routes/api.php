@@ -35,10 +35,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/register/dentist', [RegisterUsersController::class, 'registerDentist']);
     Route::post('/register/admin', [RegisterUsersController::class, 'registerAdmin']);
     Route::get('/get-all-users', [ExistingUserController::class, 'getAllUsers']);
-    Route::get('/get-user/{id}', [ExistingUserController::class, 'getUserById']);
+    Route::get('/get-user/{id_card}', [ExistingUserController::class, 'getUserById']);
     Route::get('/get-users/{id}', [ExistingUserController::class, 'getUsersByRol']);
     // AYUDA A QUE CADA USUARIO ACTUALICE SU INFORMACIÓN
     Route::post('/update-user', [ExistingUserController::class, 'updateLoggedInUser']);
-    Route::post('/update-user/{id}', [ExistingUserController::class, 'updateUserById']);
-    Route::delete('/delete-user/{id}', [ExistingUserController::class, 'deleteUserById']);
+    Route::post('/update-user/{id_card}', [ExistingUserController::class, 'updateUserById']);
+    // deshabilitar y habilitar
+    Route::post('/disable-user/{id_card}', [ExistingUserController::class, 'disableUser']);
+    Route::post('/enable-user/{id_card}', [ExistingUserController::class, 'enableUser']);
+    
+    // Route::delete('/delete-user/{id}', [ExistingUserController::class, 'deleteUserById']);
+
 });

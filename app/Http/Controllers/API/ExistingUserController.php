@@ -27,17 +27,17 @@ class ExistingUserController extends Controller
         }
     }
 
-    // mostrar un usuario especifico por medio del id
-    public function getUserById(int $id)
+    // mostrar un usuario especifico por medio de la cedula
+    public function getUserById(int $id_card)
     {
-        $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
-        $rol_id = $user->rol_id; // Acceder a la propiedad rol_id del modelo de usuario
+        $userPrincipal = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
+        $rol_id = $userPrincipal->rol_id; // Acceder a la propiedad rol_id del modelo de usuario
 
         if ($rol_id == 1) {
 
-            $user = User::find($id);
+            $user = User::where('identity_card_user', $id_card)->first();
 
-            if (!$user) {
+            if ($user == null) {
                 return response()->json(['error' => 'Usuario no encontrado'], 404);
             }
 
@@ -56,9 +56,9 @@ class ExistingUserController extends Controller
         if ($rol_id == 1) {
             $users = User::where('rol_id', $id)->get();
             return response()->json($users);
-        }else {
-                return response()->json(['error' => 'Usuario sin privilegios'], 422);
-            }
+        } else {
+            return response()->json(['error' => 'Usuario sin privilegios'], 422);
+        }
     }
 
     // editar datos propios - usuario logeado
@@ -67,6 +67,8 @@ class ExistingUserController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
+            'names' => 'required|string|max:255',
+            'surnames' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'phone' => 'required|string|numeric|digits:10',
             'address' => 'required|string|max:255',
@@ -76,6 +78,8 @@ class ExistingUserController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+        $user->names = $request->input('names');
+        $user->surnames = $request->input('surnames');
         $user->email = $request->input('email');
         $user->phone = $request->input('phone');
         $user->address = $request->input('address');
@@ -85,15 +89,23 @@ class ExistingUserController extends Controller
         return response()->json(['message' => 'Datos actualizados'], 200);
     }
 
-    public function updateUserById(int $id, Request $request)
+    public function updateUserById(int $id_card, Request $request)
     {
         $userPrincipal = Auth::user();
         $rol_id = $userPrincipal->rol_id;
 
         if ($rol_id == 1) {
-            $user = User::find($id);
+            $user = User::where('identity_card_user', $id_card)->first();
+            // return response()->json(isset($user));
+            // $user = User::find($id_card, 'identity_card_user');
+
+            if ($user == null) {
+                return response()->json(['error' => 'Usuario no encontrado'], 404);
+            }
 
             $validator = Validator::make($request->all(), [
+                'names' => 'required|string|max:255',
+                'surnames' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255',
                 'phone' => 'required|string|numeric|digits:10',
                 'address' => 'required|string|max:255',
@@ -102,6 +114,9 @@ class ExistingUserController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
+
+            $user->names = $request->input('names');
+            $user->surnames = $request->input('surnames');
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
             $user->address = $request->input('address');
@@ -114,6 +129,47 @@ class ExistingUserController extends Controller
         }
     }
 
+    public function disableUser(int $id_card)
+    {
+        $userPrincipal = Auth::user();
+        $rol_id = $userPrincipal->rol_id;
+
+        if ($rol_id == 1) {
+            $user = User::where('identity_card_user', $id_card)->first();
+
+            if ($user == null) {
+                return response()->json(['error' => 'Usuario no encontrado'], 404);
+            }
+
+            $user->user_state = 0; // estado deshabilitado
+            $user->save();
+
+            return response()->json(['message' => 'Usuario deshabilitado'], 200);
+        } else {
+            return response()->json(['error' => 'Usuario sin privilegios'], 422);
+        }
+    }
+
+    public function enableUser (int $id_card) {
+        $userPrincipal = Auth::user();
+        $rol_id = $userPrincipal->rol_id;
+
+        if ($rol_id == 1) {
+            $user = User::where('identity_card_user', $id_card)->first();
+
+            if ($user == null) {
+                return response()->json(['error' => 'Usuario no encontrado'], 404);
+            }
+
+            $user->user_state = 1; // estado habilitado
+            $user->save();
+            
+            return response()->json(['message' => 'Usuario habilitado'], 200);
+        } else {
+            return response()->json(['error' => 'Usuario sin privilegios'], 422);
+        }
+    }
+
     public function deleteUserById(int $id)
     {
         $userPrincipal = Auth::user();
@@ -121,7 +177,7 @@ class ExistingUserController extends Controller
 
         if ($rol_id == 1) {
             $user = User::find($id);
-            if (isset($user)){
+            if (isset($user)) {
                 $user->delete();
                 return response()->json(['message' => 'Datos Usuario Eliminado'], 200);
             } else {

@@ -45,6 +45,7 @@ class RegisterUsersController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'phone' => $request->input('phone'),
                 'address' => $request->input('address'),
+                'user_state' => 1, //estado activo
             ]);
             // Retornar una respuesta exitosa
             return response()->json(['message' => 'Usuario registrado exitosamente'], 201);
@@ -88,6 +89,7 @@ class RegisterUsersController extends Controller
                     'password' => Hash::make($request->input('password')),
                     'phone' => $request->input('phone'),
                     'address' => $request->input('address'),
+                    'user_state' => 1, //estado activo
                 ]);
                 // Retornar una respuesta exitosa
                 return response()->json(['message' => 'Usuario registrado exitosamente'], 201);
@@ -134,6 +136,7 @@ class RegisterUsersController extends Controller
                     'password' => Hash::make($request->input('password')),
                     'phone' => $request->input('phone'),
                     'address' => $request->input('address'),
+                    'user_state' => 1, //estado activo
                 ]);
                 // Retornar una respuesta exitosa
                 return response()->json(['message' => 'Usuario registrado exitosamente'], 201);

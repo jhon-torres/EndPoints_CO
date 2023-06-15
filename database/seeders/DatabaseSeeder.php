@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             'surnames' => 'Test Test',
             'email' => 'admin@epn.edu.ec',
             'password' => bcrypt('password'),
+            'user_state' => 1,
             'phone' => '0978451236',
             'address' => 'Quito Sur'
         ]);
