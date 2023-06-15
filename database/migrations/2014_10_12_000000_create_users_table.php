@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('phone');
             $table->string('address');
             $table->string('password');
-            $table->string('profile_picture')->nullable();
+            $table->string('profile_picture_id')->nullable();
+            $table->string('profile_picture_url')->nullable();
             $table->text('profesional_description')->nullable();
             $table->integer('user_state');
             $table->timestamp('email_verified_at')->nullable();
