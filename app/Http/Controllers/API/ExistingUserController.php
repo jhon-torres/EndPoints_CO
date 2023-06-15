@@ -84,6 +84,10 @@ class ExistingUserController extends Controller
         $user->phone = $request->input('phone');
         $user->address = $request->input('address');
 
+        // if ($user->id == 2 ){
+        //     $user->profesional_description = $request->input('profesional_description');
+        // }
+
         $user->save();
 
         return response()->json(['message' => 'Datos actualizados'], 200);
@@ -121,6 +125,10 @@ class ExistingUserController extends Controller
             $user->phone = $request->input('phone');
             $user->address = $request->input('address');
 
+            // if ($user->id == 2 ){
+            //     $user->profesional_description = $request->input('profesional_description');
+            // }
+
             $user->save();
 
             return response()->json(['message' => 'Datos actualizados'], 200);
@@ -150,7 +158,8 @@ class ExistingUserController extends Controller
         }
     }
 
-    public function enableUser (int $id_card) {
+    public function enableUser(int $id_card)
+    {
         $userPrincipal = Auth::user();
         $rol_id = $userPrincipal->rol_id;
 
@@ -163,7 +172,7 @@ class ExistingUserController extends Controller
 
             $user->user_state = 1; // estado habilitado
             $user->save();
-            
+
             return response()->json(['message' => 'Usuario habilitado'], 200);
         } else {
             return response()->json(['error' => 'Usuario sin privilegios'], 422);

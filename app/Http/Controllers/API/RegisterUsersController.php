@@ -67,6 +67,7 @@ class RegisterUsersController extends Controller
                 'password' => 'required|string|min:8',
                 'phone' => 'required|string|numeric|digits:10',
                 'address' => 'required|string|max:255',
+                'profesional_description' => 'required|string'
             ]);
     
             // variable boolean para verificar que la contraseña coincide con la confirmacion
@@ -90,6 +91,7 @@ class RegisterUsersController extends Controller
                     'phone' => $request->input('phone'),
                     'address' => $request->input('address'),
                     'user_state' => 1, //estado activo
+                    'profesional_description' => $request->input('profesional_description'),
                 ]);
                 // Retornar una respuesta exitosa
                 return response()->json(['message' => 'Usuario registrado exitosamente'], 201);
