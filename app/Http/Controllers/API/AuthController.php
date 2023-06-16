@@ -27,7 +27,7 @@ class AuthController extends Controller
         } else {
             $user = User::where('email', $request->input("email"))->first();
 
-            if ($user) {
+            if ($user && $user->user_state==1) {
                 if (Hash::check($request['password'], $user->password)) {
                     $token = PersonalAccessToken::where('tokenable_id', $user->id);
                     $token->delete();
@@ -37,7 +37,7 @@ class AuthController extends Controller
                     return response()->json(['error' => 'Credenciales incorrectas'], 401);
                 }
             } else {
-                return response()->json(['error' => 'Usuario no encontrado'], 404);
+                return response()->json(['error' => 'Usuario no encontrado o deshabilitado'], 404);
             }
         }
     }
