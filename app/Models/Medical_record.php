@@ -9,6 +9,8 @@ class Medical_record extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     // relacion uno a uno
     public function user ()
     {

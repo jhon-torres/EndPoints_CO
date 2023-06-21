@@ -9,6 +9,8 @@ class Notification extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     // Relación de uno a muchos
     public function user ()
     {

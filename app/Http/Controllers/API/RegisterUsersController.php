@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Medical_record;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -57,6 +58,12 @@ class RegisterUsersController extends Controller
                 // 'profile_picture_id' => $public_id,
                 // 'profile_picture_url' => $url
             ]);
+
+            // se le crea un historial clinico
+            $medical_record = Medical_record::create([
+                'identity_card_user' => $request->input('identity_card_user'),
+            ]);
+
             // Retornar una respuesta exitosa
             return response()->json(['message' => 'Usuario registrado exitosamente'], 201);
         }
