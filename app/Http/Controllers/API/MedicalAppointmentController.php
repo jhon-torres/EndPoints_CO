@@ -7,6 +7,7 @@ use App\Models\Medical_appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\JsonResponse;
 
 class MedicalAppointmentController extends Controller
 {
@@ -93,4 +94,34 @@ class MedicalAppointmentController extends Controller
             return response()->json(['error' => 'Usuario sin privilegios'], 422);
         }
     }
+
+    // consulta de todas las citas médica
+    public function getAllAppointments (): JsonResponse 
+    {
+        $medical_appointments = Medical_appointment::all();
+        return response()->json([$medical_appointments], 200);
+    }
+
+    // consulta de cita médica por id
+    public function getAppointmentById (int $id){
+        $medical_appointment = Medical_appointment::where('id', $id)->first();
+
+        if ($medical_appointment == null) {
+            return response()->json(['error' => 'Cita médica no encontrada'], 404);
+        }
+    
+        return response()->json([$medical_appointment], 200);
+    }
+
+    // consulta de citas medicas por status / 1 = disponible / 2 = no disponible
+    public function getAppointmentsByStatus (int $id_status) {
+        $medical_appointments = Medical_appointment::where('id_status', $id_status)->get();
+        if (!empty($medical_appointments[0])){
+            return response()->json([$medical_appointments], 200);
+        } 
+        // else {
+        //     return response()->json(['error' => 'Cita médica no encontrada'], 404);
+        // }
+    }
+
 }

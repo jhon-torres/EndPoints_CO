@@ -22,7 +22,7 @@ class ExistingUserController extends Controller
         if ($rol_id == 1) {
 
             $users = User::all();
-            return response()->json($users);
+            return response()->json([$users], 200);
         } else {
             return response()->json(['error' => 'Usuario sin privilegios'], 422);
         }
@@ -56,7 +56,7 @@ class ExistingUserController extends Controller
 
         if ($rol_id == 1) {
             $users = User::where('rol_id', $id)->get();
-            return response()->json($users);
+            return response()->json([$users], 200);
         } else {
             return response()->json(['error' => 'Usuario sin privilegios'], 422);
         }

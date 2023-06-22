@@ -46,7 +46,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/enable-user/{id_card}', [ExistingUserController::class, 'enableUser']);
     
     // Route::delete('/delete-user/{id}', [ExistingUserController::class, 'deleteUserById']);
-
+    
+    // creación de citas medicas
     Route::post('/createAppointDentist', [MedicalAppointmentController::class, 'createAppointmentDentist']);
     Route::post('/createAppointAdmin', [MedicalAppointmentController::class, 'createAppointmentAdmin']);
+    // CONSULTAS DE CITAS MEDICAS
+    Route::get('/getAllAppointments', [MedicalAppointmentController::class, 'getAllAppointments']);
+    Route::get('/getAppointment/{id}', [MedicalAppointmentController::class, 'getAppointmentById']);
+    Route::get('/getAppointments/{id_status}', [MedicalAppointmentController::class, 'getAppointmentsByStatus']);
 });
