@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('reason');
             $table->string('current_illness');
             $table->string('diagnosis');
-            $table->text('odontogram');
+            $table->json('odontogram');
             $table->timestamps();
         });
     }
