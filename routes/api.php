@@ -48,5 +48,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Route::delete('/delete-user/{id}', [ExistingUserController::class, 'deleteUserById']);
 
     Route::post('/createAppointDentist', [MedicalAppointmentController::class, 'createAppointmentDentist']);
-
+    Route::post('/createAppointAdmin', [MedicalAppointmentController::class, 'createAppointmentAdmin']);
 });
