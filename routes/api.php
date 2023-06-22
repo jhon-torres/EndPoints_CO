@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RegisterUsersController;
 use App\Http\Controllers\API\ExistingUserController;
+use App\Http\Controllers\API\MedicalAppointmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,5 +46,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/enable-user/{id_card}', [ExistingUserController::class, 'enableUser']);
     
     // Route::delete('/delete-user/{id}', [ExistingUserController::class, 'deleteUserById']);
+
+    Route::post('/createAppointDentist', [MedicalAppointmentController::class, 'createAppointmentDentist']);
 
 });

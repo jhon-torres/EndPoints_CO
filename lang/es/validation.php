@@ -146,6 +146,8 @@ return [
         'names'                    => 'nombres',
         'surnames'                 => 'apellidos',
         'profesional_description'  => 'descripción profesional',
+        'start_time'               => 'tiempo inicial',
+        'end_time'                 => 'tiempo final',
         'address'                  => 'dirección',
         'age'                      => 'edad',
         'amount'                   => 'cantidad',

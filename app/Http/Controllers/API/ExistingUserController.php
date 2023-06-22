@@ -74,6 +74,7 @@ class ExistingUserController extends Controller
             'phone' => 'required|string|numeric|digits:10',
             'address' => 'required|string|max:255',
             'image' => 'required|image',
+            'profesional_description' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -105,9 +106,11 @@ class ExistingUserController extends Controller
         $user->profile_picture_id = $public_id;
         $user->profile_picture_url = $url;
 
-        // if ($user->id == 2 ){
-        //     $user->profesional_description = $request->input('profesional_description');
-        // }
+        if ($user->id == 2 ){
+            $user->profesional_description = $request->input('profesional_description');
+        } else {
+            $user->profesional_description = null;
+        }
 
         $user->save();
 
@@ -135,6 +138,7 @@ class ExistingUserController extends Controller
                 'phone' => 'required|string|numeric|digits:10',
                 'address' => 'required|string|max:255',
                 'image' => 'required|image',
+                'profesional_description' => 'nullable|string|max:255',
             ]);
 
             if ($validator->fails()) {
@@ -165,9 +169,11 @@ class ExistingUserController extends Controller
             $user->profile_picture_id = $public_id;
             $user->profile_picture_url = $url;
 
-            // if ($user->id == 2 ){
-            //     $user->profesional_description = $request->input('profesional_description');
-            // }
+            if ($user->id == 2 ){
+                $user->profesional_description = $request->input('profesional_description');
+            } else {
+                $user->profesional_description = null;
+            }
 
             $user->save();
 
