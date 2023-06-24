@@ -51,10 +51,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/createAppointDentist', [MedicalAppointmentController::class, 'createAppointmentDentist']);
     Route::post('/createAppointAdmin', [MedicalAppointmentController::class, 'createAppointmentAdmin']);
     // CONSULTAS DE CITAS MEDICAS
+    Route::get('/getAppointmentsUser', [MedicalAppointmentController::class, 'getAppointmentsByUser']);
     Route::get('/getAllAppointments', [MedicalAppointmentController::class, 'getAllAppointments']);
     Route::get('/getAppointment/{id}', [MedicalAppointmentController::class, 'getAppointmentById']);
     Route::get('/getAppointments/{id_status}', [MedicalAppointmentController::class, 'getAppointmentsByStatus']);
     Route::get('/getAppointmentsByDentist/{id_card}', [MedicalAppointmentController::class, 'getAppointmentsByDentist']);
     // ACTUALIZAR CITA M.
-    Route::post('/updateAppointment/{id_appointment}', [MedicalAppointmentController::class, 'updateMedicalAppointment']);
+    Route::post('/updateAppointment/{id}', [MedicalAppointmentController::class, 'updateMedicalAppointment']);
+    // agendar y cancelar cita
+    Route::post('/scheduleAppointment/{id}', [MedicalAppointmentController::class, 'scheduleAppointment']);
+    Route::post('/cancelAppointment/{id}', [MedicalAppointmentController::class, 'cancelAppointment']);
 });

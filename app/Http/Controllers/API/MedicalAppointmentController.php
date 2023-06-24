@@ -95,11 +95,43 @@ class MedicalAppointmentController extends Controller
         }
     }
 
+    // consulta de citas médicas según usuario
+    public function getAppointmentsByUser(): JsonResponse
+    {
+        $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
+        $rol_id = $user->rol_id; // Acceder a la propiedad rol_id del modelo de usuario
+
+        if ($rol_id == 1) {
+            $medical_appointments = Medical_appointment::all();
+        } 
+        elseif ($rol_id == 2){
+            $medical_appointments = Medical_appointment::where('identity_card_user', $user->identity_card_user)->get();
+        }
+        elseif ($rol_id == 3){
+            $medical_appointments = Medical_appointment::where('id_patient', $user->identity_card_user)
+            ->orWhere('id_status', 1)
+            ->get();
+        }
+        else{
+            $medical_appointments = null;
+        }
+        if (!empty($medical_appointments[0])) {
+            return response()->json([$medical_appointments], 200);
+        }
+    }
+
     // consulta de todas las citas médica
     public function getAllAppointments(): JsonResponse
     {
-        $medical_appointments = Medical_appointment::all();
-        return response()->json([$medical_appointments], 200);
+        $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
+        $rol_id = $user->rol_id; // Acceder a la propiedad rol_id del modelo de usuario
+
+        if ($rol_id == 1) {
+            $medical_appointments = Medical_appointment::all();
+            return response()->json([$medical_appointments], 200);
+        } else {
+            return response()->json(['error' => 'Usuario sin privilegios'], 422);
+        }
     }
 
     // consulta de cita médica por id
@@ -179,6 +211,52 @@ class MedicalAppointmentController extends Controller
             }
         } else {
             return response()->json(['error' => 'Usuario sin privilegios'], 422);
+        }
+    }
+
+    //agendar cita
+    public function scheduleAppointment(int $id)
+    {
+        $userPrincipal = Auth::user();
+        $rol_id = $userPrincipal->rol_id;
+
+        if ($rol_id == 3) {
+            $appointment = Medical_appointment::where('id', $id)->first();
+
+            if ($appointment == null) {
+                return response()->json(['error' => 'Cita médica no encontrada'], 404);
+            }
+
+            $appointment->id_status = 2; // no disponible
+            $appointment->id_patient = $userPrincipal->identity_card_user;
+            $appointment->save();
+
+            return response()->json(['message' => 'Cita médica cancelada'], 200);
+        } else {
+            return response()->json(['error' => 'Un paciente puede cancelar su cita'], 422);
+        }
+    }
+
+    //cancelar cita
+    public function cancelAppointment(int $id)
+    {
+        $userPrincipal = Auth::user();
+        $rol_id = $userPrincipal->rol_id;
+
+        if ($rol_id == 3) {
+            $appointment = Medical_appointment::where('id', $id)->first();
+
+            if ($appointment == null) {
+                return response()->json(['error' => 'Cita médica no encontrada'], 404);
+            }
+
+            $appointment->id_status = 1; // disponible
+            $appointment->id_patient = null;
+            $appointment->save();
+
+            return response()->json(['message' => 'Cita médica cancelada'], 200);
+        } else {
+            return response()->json(['error' => 'Un paciente puede cancelar su cita'], 422);
         }
     }
 }
