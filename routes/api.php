@@ -54,4 +54,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/getAllAppointments', [MedicalAppointmentController::class, 'getAllAppointments']);
     Route::get('/getAppointment/{id}', [MedicalAppointmentController::class, 'getAppointmentById']);
     Route::get('/getAppointments/{id_status}', [MedicalAppointmentController::class, 'getAppointmentsByStatus']);
+    Route::get('/getAppointmentsByDentist/{id_card}', [MedicalAppointmentController::class, 'getAppointmentsByDentist']);
+    // ACTUALIZAR CITA M.
+    Route::post('/updateAppointment/{id_appointment}', [MedicalAppointmentController::class, 'updateMedicalAppointment']);
 });
