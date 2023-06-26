@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RegisterUsersController;
 use App\Http\Controllers\API\ExistingUserController;
 use App\Http\Controllers\API\MedicalAppointmentController;
+use App\Http\Controllers\API\MedicalRecordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,4 +62,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // agendar y cancelar cita
     Route::post('/scheduleAppointment/{id}', [MedicalAppointmentController::class, 'scheduleAppointment']);
     Route::post('/cancelAppointment/{id}', [MedicalAppointmentController::class, 'cancelAppointment']);
+
+    // creación historias clínicas / uso exclusivo de admin
+    Route::post('/createMedicalRecord', [MedicalRecordController::class, 'createMedicalRecord']);
 });
