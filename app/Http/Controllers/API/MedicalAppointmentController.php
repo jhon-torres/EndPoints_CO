@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Medical_appointment;
+use DragonCode\Contracts\Cashier\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -103,16 +104,13 @@ class MedicalAppointmentController extends Controller
 
         if ($rol_id == 1) {
             $medical_appointments = Medical_appointment::all();
-        } 
-        elseif ($rol_id == 2){
+        } elseif ($rol_id == 2) {
             $medical_appointments = Medical_appointment::where('identity_card_user', $user->identity_card_user)->get();
-        }
-        elseif ($rol_id == 3){
+        } elseif ($rol_id == 3) {
             $medical_appointments = Medical_appointment::where('id_patient', $user->identity_card_user)
-            ->orWhere('id_status', 1)
-            ->get();
-        }
-        else{
+                ->orWhere('id_status', 1)
+                ->get();
+        } else {
             $medical_appointments = null;
         }
         if (!empty($medical_appointments[0])) {
@@ -231,9 +229,39 @@ class MedicalAppointmentController extends Controller
             $appointment->id_patient = $userPrincipal->identity_card_user;
             $appointment->save();
 
-            return response()->json(['message' => 'Cita médica cancelada'], 200);
+            return response()->json(['message' => 'Cita médica agendada'], 200);
         } else {
-            return response()->json(['error' => 'Un paciente puede cancelar su cita'], 422);
+            return response()->json(['error' => 'El usuario no es Paciente'], 422);
+        }
+    }
+
+    // agendar cita desde admin para un paciente especifico
+    public function scheduleAppointmentPatient(int $id, Request $request)
+    {
+        $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
+        $rol_id = $user->rol_id; // Acceder a la propiedad rol_id del modelo de usuario
+        
+        if ($rol_id == 1) { // admin
+            $validator = Validator::make($request->all(), [
+                'identity_card_user' => 'required|exists:users,identity_card_user',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()], 422);
+            } else {
+                $appointment = Medical_appointment::where('id', $id)->first();
+
+                if ($appointment == null) {
+                    return response()->json(['error' => 'Cita médica no encontrada'], 404);
+                }
+
+                $appointment->id_status = 2; // no disponible
+                $appointment->id_patient = $request->input('identity_card_user');
+                $appointment->save();
+
+                return response()->json(['message' => 'Cita médica agendada'], 200);
+            }
+        } else {
+            return response()->json(['error' => 'Usuario sin privilegios'], 422);
         }
     }
 
