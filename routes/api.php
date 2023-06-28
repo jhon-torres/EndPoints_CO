@@ -39,6 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/get-all-users', [ExistingUserController::class, 'getAllUsers']);
     Route::get('/get-user/{id_card}', [ExistingUserController::class, 'getUserById']);
     Route::get('/get-users/{id}', [ExistingUserController::class, 'getUsersByRol']);
+    Route::get('/get-user', [ExistingUserController::class, 'getUserLogged']);
     // AYUDA A QUE CADA USUARIO ACTUALICE SU INFORMACIÓN
     Route::post('/update-user', [ExistingUserController::class, 'updateLoggedInUser']);
     Route::post('/update-user/{id_card}', [ExistingUserController::class, 'updateUserById']);

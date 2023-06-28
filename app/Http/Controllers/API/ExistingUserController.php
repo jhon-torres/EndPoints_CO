@@ -62,6 +62,19 @@ class ExistingUserController extends Controller
         }
     }
 
+    // consulta de usuario logeado
+    public function getUserLogged() {
+        $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
+        $user = User::where('identity_card_user', $user->identity_card_user)->first();
+
+            if ($user == null) {
+                return response()->json(['error' => 'Usuario no encontrado'], 404);
+            }
+
+            return response()->json($user);
+
+    }
+
     // editar datos propios - usuario logeado
     public function updateLoggedInUser(Request $request)
     {
