@@ -116,6 +116,7 @@ class MedicalAppointmentController extends Controller
         if (!empty($medical_appointments[0])) {
             return response()->json([$medical_appointments], 200);
         }
+        return response()->json(['message' => 'No se encontraron citas médicas'], 404);
     }
 
     // consulta de todas las citas médica
@@ -171,7 +172,7 @@ class MedicalAppointmentController extends Controller
         $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
         $rol_id = $user->rol_id; // Acceder a la propiedad rol_id del modelo de usuario
 
-        if ($rol_id == 2 || $rol_id == 1) { // doctor
+        if ($rol_id == 2 || $rol_id == 1) { // doctor y admin
             $validator = Validator::make($request->all(), [
                 'date' => 'required|date',
                 'start_time' => 'required|date_format:H:i',
