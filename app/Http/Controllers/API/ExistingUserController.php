@@ -86,7 +86,7 @@ class ExistingUserController extends Controller
             'email' => 'required|string|email|max:255',
             'phone' => 'required|string|numeric|digits:10',
             'address' => 'required|string|max:255',
-            // 'image' => 'required|image',
+            // 'image' => 'required|image|mimes:jpeg,png',',
             'image' => 'nullable|image',
             'profesional_description' => 'nullable|string|max:255',
         ]);
