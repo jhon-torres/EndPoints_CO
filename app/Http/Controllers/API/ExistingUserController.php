@@ -63,16 +63,16 @@ class ExistingUserController extends Controller
     }
 
     // consulta de usuario logeado
-    public function getUserLogged() {
+    public function getUserLogged()
+    {
         $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
         $user = User::where('identity_card_user', $user->identity_card_user)->first();
 
-            if ($user == null) {
-                return response()->json(['error' => 'Usuario no encontrado'], 404);
-            }
+        if ($user == null) {
+            return response()->json(['error' => 'Usuario no encontrado'], 404);
+        }
 
-            return response()->json($user);
-
+        return response()->json($user);
     }
 
     // editar datos propios - usuario logeado
@@ -86,7 +86,8 @@ class ExistingUserController extends Controller
             'email' => 'required|string|email|max:255',
             'phone' => 'required|string|numeric|digits:10',
             'address' => 'required|string|max:255',
-            'image' => 'required|image',
+            // 'image' => 'required|image',
+            'image' => 'nullable|image',
             'profesional_description' => 'nullable|string|max:255',
         ]);
 
@@ -98,17 +99,23 @@ class ExistingUserController extends Controller
         $url = $user->profile_picture_url;
         $public_id = $user->profile_picture_id;
 
-        if (isset($user->profile_picture_id) && isset($user->profile_picture_url)) {
-            Cloudinary::destroy($public_id);
-            $file = $request->file('image');
-            $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
-            $public_id = $obj->getPublicId();
-            $url = $obj->getSecurePath();
+        // implementacion nulo image
+        if ($request->hasFile('image')) {
+            if (isset($user->profile_picture_id) && isset($user->profile_picture_url)) {
+                Cloudinary::destroy($public_id);
+                $file = $request->file('image');
+                $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
+                $public_id = $obj->getPublicId();
+                $url = $obj->getSecurePath();
+            } else {
+                $file = $request->file('image');
+                $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
+                $public_id = $obj->getPublicId();
+                $url = $obj->getSecurePath();
+            }
         } else {
-            $file = $request->file('image');
-            $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
-            $public_id = $obj->getPublicId();
-            $url = $obj->getSecurePath();
+            $url = $user->profile_picture_url;
+            $public_id = $user->profile_picture_id;
         }
 
         $user->names = $request->input('names');
@@ -119,7 +126,7 @@ class ExistingUserController extends Controller
         $user->profile_picture_id = $public_id;
         $user->profile_picture_url = $url;
 
-        if ($user->id == 2 ){
+        if ($user->id == 2) {
             $user->profesional_description = $request->input('profesional_description');
         } else {
             $user->profesional_description = null;
@@ -150,7 +157,8 @@ class ExistingUserController extends Controller
                 'email' => 'required|string|email|max:255',
                 'phone' => 'required|string|numeric|digits:10',
                 'address' => 'required|string|max:255',
-                'image' => 'required|image',
+                // 'image' => 'required|image',
+                'image' => 'nullable|image',
                 'profesional_description' => 'nullable|string|max:255',
             ]);
 
@@ -161,17 +169,24 @@ class ExistingUserController extends Controller
             $url = $user->profile_picture_url;
             $public_id = $user->profile_picture_id;
 
-            if (isset($user->profile_picture_id) && isset($user->profile_picture_url)) {
-                Cloudinary::destroy($public_id);
-                $file = $request->file('image');
-                $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
-                $public_id = $obj->getPublicId();
-                $url = $obj->getSecurePath();
+
+            // implementacion image nulo en la API
+            if ($request->hasFile('image')) {
+                if (isset($user->profile_picture_id) && isset($user->profile_picture_url)) {
+                    Cloudinary::destroy($public_id);
+                    $file = $request->file('image');
+                    $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
+                    $public_id = $obj->getPublicId();
+                    $url = $obj->getSecurePath();
+                } else {
+                    $file = $request->file('image');
+                    $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
+                    $public_id = $obj->getPublicId();
+                    $url = $obj->getSecurePath();
+                }
             } else {
-                $file = $request->file('image');
-                $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'users']);
-                $public_id = $obj->getPublicId();
-                $url = $obj->getSecurePath();
+                $url = $user->profile_picture_url;
+                $public_id = $user->profile_picture_id;
             }
 
             $user->names = $request->input('names');
@@ -182,7 +197,7 @@ class ExistingUserController extends Controller
             $user->profile_picture_id = $public_id;
             $user->profile_picture_url = $url;
 
-            if ($user->id == 2 ){
+            if ($user->id == 2) {
                 $user->profesional_description = $request->input('profesional_description');
             } else {
                 $user->profesional_description = null;
