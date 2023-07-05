@@ -18,7 +18,7 @@ class RegisterUsersController extends Controller
     {
         $rol = 3;
         $validator = Validator::make($request->all(), [
-            'identity_card_user' => 'required|string|numeric|integer|digits:10',
+            'identity_card_user' => 'required|string|numeric|integer|digits:10|unique:users',
             'names' => 'required|string|max:255',
             'surnames' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -77,7 +77,7 @@ class RegisterUsersController extends Controller
         if ($rol_id == 1) { //solo admin
             $rol = 2;
             $validator = Validator::make($request->all(), [
-                'identity_card_user' => 'required|string|numeric|integer|digits:10',
+                'identity_card_user' => 'required|string|numeric|integer|digits:10|unique:users',
                 'names' => 'required|string|max:255',
                 'surnames' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
@@ -134,7 +134,7 @@ class RegisterUsersController extends Controller
         if ($rol_id == 1) { //solo admin
             $rol = 1;
             $validator = Validator::make($request->all(), [
-                'identity_card_user' => 'required|string|numeric|integer|digits:10',
+                'identity_card_user' => 'required|string|numeric|integer|digits:10|unique:users',
                 'names' => 'required|string|max:255',
                 'surnames' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
