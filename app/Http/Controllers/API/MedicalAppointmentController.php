@@ -116,7 +116,8 @@ class MedicalAppointmentController extends Controller
         if (!empty($medical_appointments[0])) {
             return response()->json([$medical_appointments], 200);
         }
-        return response()->json(['message' => 'No se encontraron citas médicas'], 404);
+        // return response()->json(['message' => 'No se encontraron citas médicas'], 404);
+        return response()->json(['message' => 'No se encontraron citas médicas']);
     }
 
     // consulta de todas las citas médica

@@ -24,6 +24,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return response()->json(['error' => 'Completa los campos correctamente'], 422);
+            
         } else {
             $user = User::where('email', $request->input("email"))->first();
 
