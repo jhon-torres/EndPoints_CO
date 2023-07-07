@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 class MedicalAppointmentController extends Controller
 {
@@ -21,10 +23,23 @@ class MedicalAppointmentController extends Controller
 
         if ($rol_id == 2) { // doctor
             $validator = Validator::make($request->all(), [
-                'date' => 'required|date',
+                'date' => 'required|date|after_or_equal:today', // La fecha debe ser igual o posterior a la fecha actual
                 'start_time' => 'required|date_format:H:i',
-                'end_time' => 'required|date_format:H:i',
+                'end_time' => 'required|date_format:H:i|after:start_time', // end_time debe ser posterior a start_time
                 // 'identity_card_user' => 'exists:users,identity_card_user',
+                // 'end_time' => [
+                //     'required',
+                //     'date_format:H:i',
+                //     Rule::requiredWith('start_time'),
+                //     function ($attribute, $value, $fail) use ($request) {
+                //         $start = Carbon::createFromFormat('H:i', $request->input('start_time'));
+                //         $end = Carbon::createFromFormat('H:i', $value);
+                        
+                //         if (!$start || !$end || $end->lte($start->addHour())) {
+                //             $fail('La diferencia entre start_time y end_time debe ser de al menos una hora.');
+                //         }
+                //     },
+                // ],
             ]);
 
             if ($validator->fails()) {
@@ -63,9 +78,9 @@ class MedicalAppointmentController extends Controller
 
         if ($rol_id == 1) { // admin
             $validator = Validator::make($request->all(), [
-                'date' => 'required|date',
+                'date' => 'required|date|after_or_equal:today', // La fecha debe ser igual o posterior a la fecha actual
                 'start_time' => 'required|date_format:H:i',
-                'end_time' => 'required|date_format:H:i',
+                'end_time' => 'required|date_format:H:i|after:start_time', // end_time debe ser posterior a start_time
                 'identity_card_user' => 'required|exists:users,identity_card_user',
             ]);
 
@@ -175,9 +190,9 @@ class MedicalAppointmentController extends Controller
 
         if ($rol_id == 2 || $rol_id == 1) { // doctor y admin
             $validator = Validator::make($request->all(), [
-                'date' => 'required|date',
+                'date' => 'required|date|after_or_equal:today', // La fecha debe ser igual o posterior a la fecha actual
                 'start_time' => 'required|date_format:H:i',
-                'end_time' => 'required|date_format:H:i',
+                'end_time' => 'required|date_format:H:i|after:start_time', // end_time debe ser posterior a start_time
                 'identity_card_user' => 'exists:users,identity_card_user',
             ]);
 
@@ -227,11 +242,14 @@ class MedicalAppointmentController extends Controller
                 return response()->json(['error' => 'Cita médica no encontrada'], 404);
             }
 
-            $appointment->id_status = 2; // no disponible
-            $appointment->id_patient = $userPrincipal->identity_card_user;
-            $appointment->save();
-
-            return response()->json(['message' => 'Cita médica agendada'], 200);
+            if ($appointment->id_status == 1) {
+                $appointment->id_status = 2; // no disponible
+                $appointment->id_patient = $userPrincipal->identity_card_user;
+                $appointment->save();
+                return response()->json(['message' => 'Cita médica agendada'], 200);
+            } else {
+                return response()->json(['error' => 'La cita ya no está disponible'], 422);
+            }
         } else {
             return response()->json(['error' => 'El usuario no es Paciente'], 422);
         }
@@ -242,7 +260,7 @@ class MedicalAppointmentController extends Controller
     {
         $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
         $rol_id = $user->rol_id; // Acceder a la propiedad rol_id del modelo de usuario
-        
+
         if ($rol_id == 1) { // admin
             $validator = Validator::make($request->all(), [
                 'identity_card_user' => 'required|exists:users,identity_card_user',
@@ -256,11 +274,15 @@ class MedicalAppointmentController extends Controller
                     return response()->json(['error' => 'Cita médica no encontrada'], 404);
                 }
 
-                $appointment->id_status = 2; // no disponible
-                $appointment->id_patient = $request->input('identity_card_user');
-                $appointment->save();
+                if ($appointment->id_status == 1) {
+                    $appointment->id_status = 2; // no disponible
+                    $appointment->id_patient = $request->input('identity_card_user');
+                    $appointment->save();
 
-                return response()->json(['message' => 'Cita médica agendada'], 200);
+                    return response()->json(['message' => 'Cita médica agendada'], 200);
+                } else {
+                    return response()->json(['error' => 'La cita ya no está disponible'], 422);
+                }
             }
         } else {
             return response()->json(['error' => 'Usuario sin privilegios'], 422);
@@ -280,11 +302,15 @@ class MedicalAppointmentController extends Controller
                 return response()->json(['error' => 'Cita médica no encontrada'], 404);
             }
 
-            $appointment->id_status = 1; // disponible
-            $appointment->id_patient = null;
-            $appointment->save();
-
-            return response()->json(['message' => 'Cita médica cancelada'], 200);
+            if ($appointment->id_status == 2) {
+                $appointment->id_status = 1; // disponible
+                $appointment->id_patient = null;
+                $appointment->save();
+    
+                return response()->json(['message' => 'Cita médica cancelada'], 200);
+            } else {
+                return response()->json(['error' => 'La cita ya está disponible'], 422);
+            }
         } else {
             return response()->json(['error' => 'Un paciente puede cancelar su cita'], 422);
         }
