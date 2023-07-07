@@ -27,20 +27,20 @@ class MedicalAppointmentController extends Controller
                 'start_time' => 'required|date_format:H:i',
                 'end_time' => 'required|date_format:H:i|after:start_time', // end_time debe ser posterior a start_time
                 // 'identity_card_user' => 'exists:users,identity_card_user',
-                // 'end_time' => [
-                //     'required',
-                //     'date_format:H:i',
-                //     Rule::requiredWith('start_time'),
-                //     function ($attribute, $value, $fail) use ($request) {
-                //         $start = Carbon::createFromFormat('H:i', $request->input('start_time'));
-                //         $end = Carbon::createFromFormat('H:i', $value);
-                        
-                //         if (!$start || !$end || $end->lte($start->addHour())) {
-                //             $fail('La diferencia entre start_time y end_time debe ser de al menos una hora.');
-                //         }
-                //     },
-                // ],
             ]);
+
+            $start_time = $request->input('start_time');
+            $end_time = $request->input('end_time');
+
+            $start_timestamp = strtotime($start_time);
+            $end_timestamp = strtotime($end_time);
+
+            $difference_in_seconds = $end_timestamp - $start_timestamp;
+
+            if ($difference_in_seconds !== 3600) {
+                return response()->json(['error' => 'El intervalo entre horas debe ser una hora.'], 422);
+            }
+
 
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 422);
@@ -83,6 +83,18 @@ class MedicalAppointmentController extends Controller
                 'end_time' => 'required|date_format:H:i|after:start_time', // end_time debe ser posterior a start_time
                 'identity_card_user' => 'required|exists:users,identity_card_user',
             ]);
+
+            $start_time = $request->input('start_time');
+            $end_time = $request->input('end_time');
+
+            $start_timestamp = strtotime($start_time);
+            $end_timestamp = strtotime($end_time);
+
+            $difference_in_seconds = $end_timestamp - $start_timestamp;
+
+            if ($difference_in_seconds !== 3600) {
+                return response()->json(['error' => 'El intervalo entre horas debe ser una hora.'], 422);
+            }
 
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 422);
@@ -196,6 +208,18 @@ class MedicalAppointmentController extends Controller
                 'identity_card_user' => 'exists:users,identity_card_user',
             ]);
 
+            $start_time = $request->input('start_time');
+            $end_time = $request->input('end_time');
+
+            $start_timestamp = strtotime($start_time);
+            $end_timestamp = strtotime($end_time);
+
+            $difference_in_seconds = $end_timestamp - $start_timestamp;
+
+            if ($difference_in_seconds !== 3600) {
+                return response()->json(['error' => 'El intervalo entre horas debe ser una hora.'], 422);
+            }
+
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 422);
             } else {
@@ -306,7 +330,7 @@ class MedicalAppointmentController extends Controller
                 $appointment->id_status = 1; // disponible
                 $appointment->id_patient = null;
                 $appointment->save();
-    
+
                 return response()->json(['message' => 'Cita médica cancelada'], 200);
             } else {
                 return response()->json(['error' => 'La cita ya está disponible'], 422);
