@@ -23,6 +23,7 @@ class MedicalRecordController extends Controller
         if ($rol_id == 1) { //solo admin
             $validator = Validator::make($request->all(), [
                 'identity_card_user' => 'required|string|numeric|integer|digits:10',
+                'background' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -35,6 +36,7 @@ class MedicalRecordController extends Controller
                 } else {
                     $record = Medical_record::create([
                         'identity_card_user' => $request->input('identity_card_user'),
+                        'background' => $request->input('background'),
                     ]);
                     return response()->json(['message' => 'Historia Clínica registrada exitosamente'], 201);
                 }

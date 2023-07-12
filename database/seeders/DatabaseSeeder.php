@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::create([
             'identity_card_user' => '1122334455',
             'rol_id' => '1',
-            'names' => 'Admin User',
-            'surnames' => 'Test Test',
+            'names' => 'Paco Sant',
+            'surnames' => 'Doe Serve',
             'email' => 'admin@epn.edu.ec',
             'password' => bcrypt('password'),
             'user_state' => 1,
