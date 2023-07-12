@@ -7,6 +7,8 @@ use App\Http\Controllers\API\RegisterUsersController;
 use App\Http\Controllers\API\ExistingUserController;
 use App\Http\Controllers\API\MedicalAppointmentController;
 use App\Http\Controllers\API\MedicalRecordController;
+use App\Http\Controllers\API\ServiceController;
+use Cloudinary\Transformation\Rotate;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgot']);
 Route::post('/check-code', [AuthController::class, 'checkCode']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+Route::get('/getServices', [ServiceController::class, 'getServices']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -68,4 +71,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // creación historias clínicas / uso exclusivo de admin
     Route::post('/createMedicalRecord', [MedicalRecordController::class, 'createMedicalRecord']);
+
+    // crear servicio
+    Route::post('/createService', [ServiceController::class, 'createService']);
+    // actualizar servicio
+    Route::post('/updateService/{id_serv}', [ServiceController::class, 'updateService']);
+    // eliminar servicio
+    Route::delete('/deleteService/{id_serv}', [ServiceController::class, 'deleteService']);
 });

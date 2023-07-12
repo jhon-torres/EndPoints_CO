@@ -141,6 +141,7 @@ class ExistingUserController extends Controller
         return response()->json(['message' => 'Datos actualizados'], 200);
     }
 
+    // actualizar datos del usuario por id
     public function updateUserById(int $id_card, Request $request)
     {
         $userPrincipal = Auth::user();
@@ -215,6 +216,7 @@ class ExistingUserController extends Controller
         }
     }
 
+    // deshabilitar usuario
     public function disableUser(int $id_card)
     {
         $userPrincipal = Auth::user();
@@ -236,6 +238,7 @@ class ExistingUserController extends Controller
         }
     }
 
+    // habilitar usuario
     public function enableUser(int $id_card)
     {
         $userPrincipal = Auth::user();

@@ -23,7 +23,22 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'user_state' => 1,
             'phone' => '0978451236',
-            'address' => 'Quito Sur'
+            'address' => 'Las Casas'
+        ]);
+        \App\Models\User::create([
+            'identity_card_user' => '1314253678',
+            'rol_id' => '2',
+            'names' => 'Gabriel S',
+            'surnames' => 'Alvarado',
+            'email' => 'gabo@epn.edu.ec',
+            'password' => bcrypt('password'),
+            'user_state' => 1,
+            'phone' => '09784512098877554436',
+            'address' => 'Solanda',
+            'profile_picture_id' => 'users/uainyflgajbiahmq0gz9',
+            'profile_picture_url' => 'https://res.cloudinary.com/dugisz2vj/image/upload/v1688394469/users/uainyflgajbiahmq0gz9.png',
+            'profesional_description' => 'Aqui va una pequeña descripción del odontólogo'
+
         ]);
     }
 }

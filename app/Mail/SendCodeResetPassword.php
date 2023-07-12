@@ -31,6 +31,6 @@ class SendCodeResetPassword extends Mailable
     public function build()
     {
         return $this->markdown('emails.send-code-reset-password')
-        ->subject('Envio de código Reseteo de contraseña');
+        ->subject('Envío de código Reseteo de contraseña');
     }
 }
