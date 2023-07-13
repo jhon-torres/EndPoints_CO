@@ -46,5 +46,35 @@ class MedicalRecordController extends Controller
         }
     }
 
+    // se actualiza el campo de los antecedentes de la historia clinica del paciente
+    public function updateMedicalRecord(int $id_card, Request $request)
+    {
+        $userPrincipal = Auth::user();
+        $rol_id = $userPrincipal->rol_id;
+
+        if ($rol_id == 2) { // solo los doctores pueden actualizar los antecedentes en la historia clínica
+            $record = Medical_record::where('identity_card_user', $id_card)->first();
+
+            if ($record == null) {
+                return response()->json(['error' => 'Historia Clínica no encontrado'], 404);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'background' => 'required|string|max:255',
+                // 'background' => ['required', 'string', 'regex:/^[\pL\s,.]+$/u', 'max:255'],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $record->background = $request->input('background');
+            $record->save();
+
+            return response()->json(['message' => 'Datos actualizados'], 200);
+        } else {
+                    return response()->json(['error' => 'No eres Odontólogo'], 422);
+                }
+    }
     
 }

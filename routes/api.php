@@ -68,14 +68,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/cancelAppointment/{id}', [MedicalAppointmentController::class, 'cancelAppointment']);
     // agendar cita para un paciente desde admin / id de la cita 
     Route::post('/scheduleAppointment/patient/{id}', [MedicalAppointmentController::class, 'scheduleAppointmentPatient']);
-
-    // creación historias clínicas / uso exclusivo de admin
-    Route::post('/createMedicalRecord', [MedicalRecordController::class, 'createMedicalRecord']);
-
+    
     // crear servicio
     Route::post('/createService', [ServiceController::class, 'createService']);
     // actualizar servicio
     Route::post('/updateService/{id_serv}', [ServiceController::class, 'updateService']);
     // eliminar servicio
     Route::delete('/deleteService/{id_serv}', [ServiceController::class, 'deleteService']);
+
+    // creación historias clínicas / uso exclusivo de admin
+    Route::post('/createMedicalRecord', [MedicalRecordController::class, 'createMedicalRecord']);
+    // actualizar historia clinica con cedula del paciente
+    Route::post('/updateMedicalRecord/{id_card}', [MedicalRecordController::class, 'updateMedicalRecord']);
+
 });

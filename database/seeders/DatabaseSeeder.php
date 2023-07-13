@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'gabo@epn.edu.ec',
             'password' => bcrypt('password'),
             'user_state' => 1,
-            'phone' => '09784512098877554436',
+            'phone' => '0978451209',
             'address' => 'Solanda',
             'profile_picture_id' => 'users/uainyflgajbiahmq0gz9',
             'profile_picture_url' => 'https://res.cloudinary.com/dugisz2vj/image/upload/v1688394469/users/uainyflgajbiahmq0gz9.png',

@@ -142,6 +142,7 @@ return [
     'url'                  => 'El campo :attribute debe ser una URL válida.',
     'uuid'                 => 'El campo :attribute debe ser un UUID válido.',
     'attributes'           => [
+        'background'               => 'antecedentes',
         'today'                    => 'hoy',
         'identity_card_user'       => 'cédula de identificación',
         'names'                    => 'nombres',
