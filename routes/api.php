@@ -81,4 +81,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // actualizar historia clinica con cedula del paciente
     Route::post('/updateMedicalRecord/{id_card}', [MedicalRecordController::class, 'updateMedicalRecord']);
 
+
+    // crear detalle de una historia clinica
+    Route::post('/createRecordDetail/{id_card}', [MedicalRecordController::class, 'createRecordDetail']);
+    // obtener todo el historial clinico de un usuario/ ADMIN / ODONT
+    Route::get('/getMedicalRecordUser/{id_card}', [MedicalRecordController::class, 'getAllMedicalRecordByIdCard']);
+    // obtener historia clínica usuario logeado
+    Route::get('/getOwnMedicalRecord', [MedicalRecordController::class, 'getOwnMedicalRecord']);
 });

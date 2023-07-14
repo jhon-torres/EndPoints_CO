@@ -142,6 +142,9 @@ return [
     'url'                  => 'El campo :attribute debe ser una URL válida.',
     'uuid'                 => 'El campo :attribute debe ser un UUID válido.',
     'attributes'           => [
+        'reason'                   => 'motivo',
+        'current_illness'          => 'enfermedad actual',
+        'odontogram'               => 'odontogram',
         'background'               => 'antecedentes',
         'today'                    => 'hoy',
         'identity_card_user'       => 'cédula de identificación',
