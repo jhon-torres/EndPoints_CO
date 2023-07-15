@@ -113,6 +113,39 @@ class MedicalRecordController extends Controller
         }
     }
 
+    public function updateRecordDetail(int $id_detail, Request $request)
+    {
+        $userPrincipal = Auth::user();
+        $rol_id = $userPrincipal->rol_id;
+
+        if ($rol_id == 2) { // solo los doctores pueden crear los detalles en una historia clinica
+            $record_detail = Record_detail::where('id', $id_detail)->first();
+
+            if ($record_detail == null) {
+                return response()->json(['error' => 'Detalle de historia clínica no encontrado'], 404);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'reason' => 'required|string|max:255',
+                'current_illness' => 'required|string|max:255',
+                'odontogram' => 'required|json'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $record_detail->reason = $request->input('reason');
+            $record_detail->current_illness = $request->input('current_illness');
+            $record_detail->odontogram = $request->input('odontogram');
+            $record_detail->save();
+
+            return response()->json(['message' => 'Detalle de historia Clínica actualizado exitosamente'], 200);
+        } else {
+            return response()->json(['error' => 'No eres Odontólogo'], 422);
+        }
+    }
+
     public function getAllMedicalRecordByIdCard(int $id_card)
     {
         $user = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RegisterUsersController;
 use App\Http\Controllers\API\ExistingUserController;
+use App\Http\Controllers\API\LandingPageController;
 use App\Http\Controllers\API\MedicalAppointmentController;
 use App\Http\Controllers\API\MedicalRecordController;
 use App\Http\Controllers\API\ServiceController;
@@ -84,8 +85,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // crear detalle de una historia clinica
     Route::post('/createRecordDetail/{id_card}', [MedicalRecordController::class, 'createRecordDetail']);
+    // actualizar detalle de una historia clínica
+    Route::post('/updateRecordDetail/{id_detail}', [MedicalRecordController::class, 'updateRecordDetail']);
     // obtener todo el historial clinico de un usuario/ ADMIN / ODONT
     Route::get('/getMedicalRecordUser/{id_card}', [MedicalRecordController::class, 'getAllMedicalRecordByIdCard']);
     // obtener historia clínica usuario logeado
     Route::get('/getOwnMedicalRecord', [MedicalRecordController::class, 'getOwnMedicalRecord']);
+
+    // info para landing page
+    Route::get('/landingPage', [LandingPageController::class, 'infoLanding']);
 });
