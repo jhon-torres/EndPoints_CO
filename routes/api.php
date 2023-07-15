@@ -32,6 +32,8 @@ Route::post('/forgot-password', [AuthController::class, 'forgot']);
 Route::post('/check-code', [AuthController::class, 'checkCode']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::get('/getServices', [ServiceController::class, 'getServices']);
+// info para landing page
+Route::get('/landingPage', [LandingPageController::class, 'infoLanding']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -92,6 +94,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // obtener historia clínica usuario logeado
     Route::get('/getOwnMedicalRecord', [MedicalRecordController::class, 'getOwnMedicalRecord']);
 
-    // info para landing page
-    Route::get('/landingPage', [LandingPageController::class, 'infoLanding']);
 });
