@@ -34,7 +34,7 @@ class ExistingUserController extends Controller
         $userPrincipal = Auth::user(); // Obtener la instancia del modelo de usuario actualmente autenticado
         $rol_id = $userPrincipal->rol_id; // Acceder a la propiedad rol_id del modelo de usuario
 
-        if ($rol_id == 1) {
+        if ($rol_id == 1 || $rol_id == 2) {
 
             $user = User::where('identity_card_user', $id_card)->first();
 
