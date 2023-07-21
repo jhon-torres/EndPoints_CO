@@ -40,5 +40,16 @@ class DatabaseSeeder extends Seeder
             'profesional_description' => 'Aqui va una pequeña descripción del odontólogo'
 
         ]);
+        \App\Models\User::create([
+            'identity_card_user' => '1712345077',
+            'rol_id' => '3',
+            'names' => 'Jhon',
+            'surnames' => 'Torres',
+            'email' => 'jhon64t@gmail.com',
+            'password' => bcrypt('password'),
+            'user_state' => 1,
+            'phone' => '0978145255',
+            'address' => 'Quito Norte'
+        ]);
     }
 }

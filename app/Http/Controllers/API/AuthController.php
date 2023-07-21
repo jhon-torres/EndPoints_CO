@@ -20,6 +20,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email',
             'password' => 'required|string',
+            'tokenDevice' => 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -27,6 +28,10 @@ class AuthController extends Controller
             
         } else {
             $user = User::where('email', $request->input("email"))->first();
+            if ($request->filled('tokenDevice')) {
+               $user->remember_token = $request->input("tokenDevice");
+               $user->save();
+            }
 
             if ($user && $user->user_state==1) {
                 if (Hash::check($request['password'], $user->password)) {
