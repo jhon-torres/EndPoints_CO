@@ -6,5 +6,4 @@
 {{ $code }}
 @endcomponent
 
-<p>El código tiene una validez de una hora a partir del momento en que se envió el mensaje.</p>
 
