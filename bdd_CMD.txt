@@ -5,3 +5,4 @@ php artisan db:seed --class=DatabaseSeeder
 php artisan config:clear
 
 
+...
