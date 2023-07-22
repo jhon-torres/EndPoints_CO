@@ -20,15 +20,19 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email',
             'password' => 'required|string',
+            'tokenDevice' => 'nullable'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => 'Completa los campos correctamente'], 422);
-            
         } else {
             $user = User::where('email', $request->input("email"))->first();
+            if ($request->filled('tokenDevice')) {
+                $user->remember_token = $request->input("tokenDevice");
+                $user->save();
+            }
 
-            if ($user && $user->user_state==1) {
+            if ($user && $user->user_state == 1) {
                 if (Hash::check($request['password'], $user->password)) {
                     $token = PersonalAccessToken::where('tokenable_id', $user->id);
                     $token->delete();
@@ -135,32 +139,30 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
-        if (Hash::check($request['password_current'], $user->password)){
+        if (Hash::check($request['password_current'], $user->password)) {
             $validator = Validator::make($request->all(), [
                 'password' => 'required|string|min:8',
             ]);
-    
+
             // variable boolean para verificar que la contraseña coincide con la confirmacion
             $password_confirm = $request->input('password') == $request->input('password_confirm');
-    
+
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 422);
             } else {
                 if (!$password_confirm) {
                     return response()->json(['error' => 'Contraseña no coincide con la confirmación'], 422);
                 }
-    
+
                 // Actualizar el campo password
                 $user->password = Hash::make($request->input('password'));
-    
+
                 $user->save();
-    
+
                 return response()->json(['message' => 'Contraseña actualizada'], 200);
             }
-
         } else {
             return response()->json(['error' => 'Contraseña Actual incorrecta'], 422);
         }
-
     }
 }
