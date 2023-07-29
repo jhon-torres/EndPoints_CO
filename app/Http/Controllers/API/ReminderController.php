@@ -44,11 +44,11 @@ class ReminderController extends Controller
         
                     // Procesar la respuesta de la solicitud y manejar errores si es necesario
                     if ($response->successful()) {
-                        echo 'Notificación enviada a odontólogo correctamente.';
-                        // return response()->json(['message' => 'Notificación enviada correctamente.']);
+                        // echo 'Notificación enviada a odontólogo correctamente.';
+                        return response()->json(['message' => 'Notificación enviada correctamente.']);
                     } else {
-                        echo 'Error al enviar la notificación.';
-                        // return response()->json(['message' => 'Error al enviar la notificación.'], 500);
+                        // echo 'Error al enviar la notificación.';
+                        return response()->json(['message' => 'Error al enviar la notificación.'], 500);
                     }
                 }
 
@@ -67,11 +67,11 @@ class ReminderController extends Controller
         
                     // Procesar la respuesta de la solicitud y manejar errores si es necesario
                     if ($response->successful()) {
-                        echo 'Notificación enviada a paciente correctamente.';
-                        // return response()->json(['message' => 'Notificación enviada correctamente.']);
+                        // echo 'Notificación enviada a paciente correctamente.';
+                        return response()->json(['message' => 'Notificación enviada correctamente.']);
                     } else {
-                        echo 'Error al enviar la notificación.';
-                        // return response()->json(['message' => 'Error al enviar la notificación.'], 500);
+                        // echo 'Error al enviar la notificación.';
+                        return response()->json(['message' => 'Error al enviar la notificación.'], 500);
                     }
                 }
 
