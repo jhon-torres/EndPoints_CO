@@ -8,6 +8,7 @@ use App\Http\Controllers\API\ExistingUserController;
 use App\Http\Controllers\API\LandingPageController;
 use App\Http\Controllers\API\MedicalAppointmentController;
 use App\Http\Controllers\API\MedicalRecordController;
+use App\Http\Controllers\API\ReminderController;
 use App\Http\Controllers\API\ServiceController;
 use Cloudinary\Transformation\Rotate;
 
@@ -34,6 +35,7 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::get('/getServices', [ServiceController::class, 'getServices']);
 // info para landing page
 Route::get('/landingPage', [LandingPageController::class, 'infoLanding']);
+Route::get('/reminders', [ReminderController::class, 'reminderDevice']);
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
