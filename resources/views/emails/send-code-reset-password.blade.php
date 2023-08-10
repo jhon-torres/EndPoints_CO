@@ -6,5 +6,5 @@
 {{ $code }}
 @endcomponent
 
-<p>Sonrie con confianza.</p>
+<p>Vuelve a sonreir.</p>
 
