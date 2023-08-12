@@ -61,9 +61,13 @@ class ExistingUserController extends Controller
             $users = User::where('rol_id', $id)->get();
             return response()->json([$users], 200);
         }
-        else {
-            return response()->json(['error' => 'Usuario sin privilegios'], 422);
+        else if($id == 3 && $rol_id == 2){
+            $users = User::where('rol_id', $id)->get();
+            return response()->json([$users], 200);
         }
+        // else {
+        //     return response()->json(['error' => 'Usuario sin privilegios'], 422);
+        // }
     }
 
     // consulta de usuario logeado
