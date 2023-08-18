@@ -134,7 +134,7 @@ class ExistingUserController extends Controller
         $user->profile_picture_id = $public_id;
         $user->profile_picture_url = $url;
 
-        if ($user->id == 2) {
+        if ($user->rol_id == 2) {
             $user->profesional_description = $request->input('profesional_description');
         } else {
             $user->profesional_description = null;
@@ -206,7 +206,7 @@ class ExistingUserController extends Controller
             $user->profile_picture_id = $public_id;
             $user->profile_picture_url = $url;
 
-            if ($user->id == 2) {
+            if ($user->rol_id == 2) {
                 $user->profesional_description = $request->input('profesional_description');
             } else {
                 $user->profesional_description = null;
