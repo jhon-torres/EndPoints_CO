@@ -93,7 +93,8 @@ class MedicalRecordController extends Controller
             $validator = Validator::make($request->all(), [
                 'reason' => 'nullable|string|max:255',
                 'current_illness' => 'nullable|string|max:255',
-                'odontogram' => 'required|json'
+                // 'odontogram' => 'required|json'
+                'odontogram' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -128,7 +129,8 @@ class MedicalRecordController extends Controller
             $validator = Validator::make($request->all(), [
                 'reason' => 'nullable|string|max:255',
                 'current_illness' => 'nullable|string|max:255',
-                'odontogram' => 'required|json'
+                // 'odontogram' => 'required|json'
+                'odontogram' => 'required'
             ]);
 
             if ($validator->fails()) {
