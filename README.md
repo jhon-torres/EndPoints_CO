@@ -2,7 +2,7 @@
 # Sistema de Gestión de Citas Médicas
 
 
-Repositorio con el código fuente de las APIs desarrolladas par el consultorio odontológico OdontoArias
+Repositorio con el código fuente de las APIs desarrolladas para el consultorio odontológico "OdontoArias"
 
 
 
@@ -29,7 +29,7 @@ A continuación, configurar la Base de Datos con nombre especificado en las vari
  - Crear **nuevo proyecto**
  - Creado el proyecto, crear un **nuevo servicio**
  - Elegir la opción **GitHub Repo**
- - Iniciar y autorizar permisos de acceso a cuenta de GitHub
+ - Iniciar y autorizar permisos de acceso a la cuenta de GitHub
  - Seleccionar el repositorio a desplegar, proyecto Laravel
  - Una vez cargado el servicio, seleccionar la opción **Variables**
  - Seleccionar **RAW Editor** y configurar las variables de entorno necesarias del proyecto
