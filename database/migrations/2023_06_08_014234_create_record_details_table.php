@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('record_details', function (Blueprint $table) {
             $table->id();
-            $table->string('reason');
-            $table->string('current_illness');
+            $table->string('reason')->nullable();
+            $table->string('current_illness')->nullable();
             $table->json('odontogram');
             $table->timestamps();
         });
